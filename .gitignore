@@ -1,0 +1,6 @@
+processed_data
+temp_data
+.DS_Store
+google-cloud-sdk
+__pycache__
+models
