@@ -131,7 +131,6 @@ def process_tfr(path, data_dir):
         frame.ParseFromString(bytearray(data.numpy()))
         encoded_jpeg, annotations = parse_frame(frame)
         filename = file_name.replace(".tfrecord", f"_{idx}.tfrecord")
-        logger.info(f"Creating example for {filename}")
         tf_example = create_tf_example(filename, encoded_jpeg, annotations)
         writer.write(tf_example.SerializeToString())
     writer.close()
