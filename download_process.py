@@ -11,7 +11,7 @@ from psutil import cpu_count
 from utils import *
 
 
-def create_tf_example(filename, encoded_jpeg, annotations, resize=True):
+def create_tf_example(filename, encoded_jpeg, annotations, resize=False):
     """
     This function create a tf.train.Example from the Waymo frame.
 
