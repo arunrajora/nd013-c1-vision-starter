@@ -4,4 +4,5 @@ temp_data
 google-cloud-sdk
 __pycache__
 models
+training
 .ipynb_checkpoints

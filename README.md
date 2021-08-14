@@ -88,7 +88,7 @@ First, let's download the [pretrained model](http://download.tensorflow.org/mode
 
 Now we need to edit the config files to change the location of the training and validation files, as well as the location of the label_map file, pretrained weights. We also need to adjust the batch size. To do so, run the following:
 ```
-python edit_config.py --train_dir /home/workspace/data/train/ --eval_dir /home/workspace/data/val/ --batch_size 4 --checkpoint ./training/pretrained-models/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8/checkpoint/ckpt-0 --label_map label_map.pbtxt
+python edit_config.py --train_dir processed_data/processed_unresized/train/ --eval_dir processed_data/processed_unresized/valid/ --batch_size 4 --checkpoint ./training/pretrained-models/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8/checkpoint/ckpt-0 --label_map label_map.pbtxt
 ```
 A new config file has been created, `pipeline_new.config`.
 
