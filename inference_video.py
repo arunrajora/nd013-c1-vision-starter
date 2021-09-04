@@ -96,6 +96,7 @@ def main(labelmap_path, model_path, tf_record_path, config_path, output_path):
     def animate(idx):
         image = images[idx]
         im_obj.set_data(image)
+        logger.info(f"Added {idx*1.0/len(images)}")
 
     anim = animation.FuncAnimation(f, animate, frames=len(images))
     anim.save(output_path, fps=24, dpi=300)
