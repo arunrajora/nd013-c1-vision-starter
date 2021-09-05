@@ -167,15 +167,3 @@ We start with the initial config file provided that uses SSD resnet-50 v1 model.
 * The cosine decay was used for learning rate and the learning rate was also updated.
 * Also, we increased the number of bounding boxes to 150.
 * The improvements were mostly minimal and precision mAP is still around 20%.
-
-#### Conclusion
- 
-I tried even more experiments that were not documented here.
-* It was hard to push the results of CenterNet HourGlass104 512x512 model.
-* I tried various augmentations, learning rate and other hyperparameters.
-* To give a rough idea, my google cloud console shows storage transfer to around 653.85 gibibyte (or around 702GB).
-* TPU is very good for training. I later switched to GPU for evaluation and TPU for training.
-* I tried to use EfficientDet D7 1536x1536 model but it consumes resources so fast even for a batch size of 4 that I was getting OOM errors.
-* With better resources, more experiments can be conducted trying out various models and hyperparameters and configs.
-* Using a cloud platform is very fast and convenient. GPU buckets are supported by the tensorflow object detection API. It even pushes the results to it and tensorboard also has support for it. So, switching from Udacity workspace to Colab notebook (pro subscription) + GCP storage provided a great experience.
-* The three demo videos do look good but flaws can be seen in them. The precision mAP was around 20%. This can be pushed even further.
