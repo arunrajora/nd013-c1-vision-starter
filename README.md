@@ -1,34 +1,30 @@
 # Object detection in an Urban Environment
 
+### Project overview
+
+In this project, we are going to train a model that can detect vehicles, pedestrians and cyclists in an image.
+* This is a very useful and the fist step of the self driving car so that it can be aware of the objects around it.
+* This way, it can track these objects and plan accordingly to be able to drive the car around.
+
+* [Tensorboard dev experiment results](https://tensorboard.dev/experiment/gdCqYz4tRbqIE0D3YI57zQ/)
+* [Youtube playlist of three demo videos](https://www.youtube.com/playlist?list=PLHHVydoaGB3HpJJq6P_hkLlIU3xLQZ19-)
+
 ## Data
 
-For this project, we will be using data from the [Waymo Open dataset](https://waymo.com/open/). The files can be downloaded directly from the website as tar files or from the [Google Cloud Bucket](https://console.cloud.google.com/storage/browser/waymo_open_dataset_v_1_2_0_individual_files/) as individual tf records. 
+For this project, we have used the [Waymo Open dataset](https://waymo.com/open/). The files can be downloaded directly from the website as tar files or from the [Google Cloud Bucket](https://console.cloud.google.com/storage/browser/waymo_open_dataset_v_1_2_0_individual_files/) as individual tf records. 
 
 ## Structure
 
-The data in the classroom workspace will be organized as follows:
-```
-/data/waymo/
-    - contains the tf records in the Tf Object detection api format.
-
-/home/workspace/data/
-    - test: contain the test data (empty to start)
-    - train: contain the train data (empty to start)
-    - val: contain the val data (empty to start)
-```
-
-The experiments folder will be organized as follow:
+The experiments have been organized in the following manner-
 ```
 experiments/
-    - exporter_main_v2.py: to create an inference model
-    - model_main_tf2.py: to launch training
-    - experiment0/....
-    - experiment1/....
+    - baseline/...
+    - experiment1/...
     - experiment2/...
-    - pretrained-models/: contains the checkpoints of the pretrained models.
+    - experiment3/...
+    - experiment4/...
 ```
-
-## Prerequisites
+Each of these experiments director has a config file for that experiment.
 
 ### Local Setup
 
@@ -36,117 +32,150 @@ For local setup if you have your own Nvidia GPU, you can use the provided Docker
 
 Follow [the README therein](./build/README.md) to create a docker container and install all prerequisites.
 
-### Classroom Workspace
-
-In the classroom workspace, every library and package should already be installed in your environment. However, you will need to login to Google Cloud using the following command:
-```
-gcloud auth login
-```
-This command will display a link that you need to copy and paste to your web browser. Follow the instructions. You can check if you are logged correctly by running :
-```
-gsutil ls gs://waymo_open_dataset_v_1_2_0_individual_files/
-```
-It should display the content of the bucket.
 
 ## Instructions
 
 ### Download and process the data
 
-**Note:** This first step is already done for you in the classroom workspace. You can find the downloaded and processed files within the `/data/waymo/` directory (note that this is different than the `/home/workspace/data` you'll use for splitting )
+The first goal of this project is to download the data from the Waymo's Google Cloud bucket to your local machine. For this project, we only need a subset of the data provided (for example, we do not need to use the Lidar data). Therefore, we are going to download and trim immediately each file. In `download_process.py`, you can view the `create_tf_example` function, which will perform this processing. This function takes the components of a Waymo Tf record and saves them in the Tf Object Detection api format using the images from the front camera of the car. An example of such function is described [here](https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/training.html#create-tensorflow-records). The `label_map.pbtxt` file is already provided.
 
-The first goal of this project is to download the data from the Waymo's Google Cloud bucket to your local machine. For this project, we only need a subset of the data provided (for example, we do not need to use the Lidar data). Therefore, we are going to download and trim immediately each file. In `download_process.py`, you can view the `create_tf_example` function, which will perform this processing. This function takes the components of a Waymo Tf record and saves them in the Tf Object Detection api format. An example of such function is described [here](https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/training.html#create-tensorflow-records). We are already providing the `label_map.pbtxt` file.
-
-You can run the script using the following (you will need to add your desired directory names):
+We can run the script using the following (you will need to add your desired directory names):
 ```
 python download_process.py --data_dir {processed_file_location} --temp_dir {temp_dir_for_raw_files}
 ```
 
-You are downloading 100 files so be patient! Once the script is done, you can look inside your data_dir folder to see if the files have been downloaded and processed correctly.
+There are 100 files to be downloaded so be patient! Once the script is done, look inside your data_dir folder to see if the files have been downloaded and processed correctly.
 
 
 ### Exploratory Data Analysis
 
-Now that you have downloaded and processed the data, you should explore the dataset! This is the most important task of any machine learning project. To do so, open the `Exploratory Data Analysis` notebook. In this notebook, your first task will be to implement a `display_instances` function to display images and annotations using `matplotlib`. This should be very similar to the function you created during the course. Once you are done, feel free to spend more time exploring the data and report your findings. Report anything relevant about the dataset in the writeup.
-
-Keep in mind that you should refer to this analysis to create the different spits (training, testing and validation). 
-
+Open the `Exploratory Data Analysis` notebook to see the exploratory data analysis. Here are the results-
+* There are 19803 total entries in our dataset. 
+* Two box plots are present that show the distribution of how much percentage of an image does a single object occupy. The first plot does not ignore the outliers while the second plot does ignore the outliers.
+* Then, a strip plot is presented for the same.
+* There are a total of 352694 vehicles, 103664 pedestrians and 2639 cyclists in our dataset.
+* Then, a box plot and a strip plot show the distribution of the number of classes in an image.
+* Finally, we found that each image in a dataset file is of a consecutive scene from the recording.
 
 ### Create the splits
 
-Now you have become one with the data! Congratulations! How will you use this knowledge to create the different splits: training, validation and testing. There are no single answer to this question but you will need to justify your choice in your submission. You will need to implement the `split_data` function in the `create_splits.py` file. Once you have implemented this function, run it using:
+We run run the following to create the split for the training, validation and test datasets-
 ```
 python create_splits.py --data_dir /home/workspace/data/
 ```
-
-NOTE: Keep in mind that your storage is limited. The files should be <ins>moved</ins> and not copied. 
+#### Cross validation
+We are going to train the model on 60% of the datset and use 20% for validation. The last 20% is for the test datset. We have used it to generate the three demo videos to see how the model performs.
+* The 100 datset files were shuffled randomly.
+* When training the model, we set shuffle to true.
+* This way, the script will create a buffer and from each random file, fetch images randomly to get the batch sizes.
 
 ### Edit the config file
 
-Now you are ready for training. As we explain during the course, the Tf Object Detection API relies on **config files**. The config that we will use for this project is `pipeline.config`, which is the config for a SSD Resnet 50 640x640 model. You can learn more about the Single Shot Detector [here](https://arxiv.org/pdf/1512.02325.pdf). 
+The Tf Object Detection API relies on **config files**. The config that we will use for this project is `pipeline.config`, which is the config for a SSD Resnet 50 640x640 model. You can learn more about the Single Shot Detector [here](https://arxiv.org/pdf/1512.02325.pdf). 
 
-First, let's download the [pretrained model](http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8.tar.gz) and move it to `training/pretrained-models/`. 
+First, download the [pretrained model](http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8.tar.gz) and move it to `training/pretrained-models/`. 
 
 Now we need to edit the config files to change the location of the training and validation files, as well as the location of the label_map file, pretrained weights. We also need to adjust the batch size. To do so, run the following:
 ```
 python edit_config.py --train_dir processed_data/processed_unresized/train/ --eval_dir processed_data/processed_unresized/valid/ --batch_size 4 --checkpoint ./training/pretrained-models/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8/checkpoint/ckpt-0 --label_map label_map.pbtxt
 ```
-A new config file has been created, `pipeline_new.config`.
+A new config file will be created, `pipeline_new.config` which can be used for training and evaluation.
 
 ### Training
 
-You will now launch your very first experiment with the Tensorflow object detection API. Create a folder `training/reference`. Move the `pipeline_new.config` to this folder. You will now have to launch two processes: 
-* a training process:
+To train a model, we can run-
 ```
 python model_main_tf2.py --model_dir=training/reference/ --pipeline_config_path=training/reference/pipeline_new.config
 ```
-* an evaluation process:
+* for evaluation, we can run-
 ```
 python model_main_tf2.py --model_dir=training/reference/ --pipeline_config_path=training/reference/pipeline_new.config --checkpoint_dir=training/reference/
 ```
 
 NOTE: both processes will display some Tensorflow warnings.
 
-To monitor the training, you can launch a tensorboard instance by running `tensorboard --logdir=training`. You will report your findings in the writeup. 
+To monitor the training, we can launch a tensorboard instance by running `tensorboard --logdir=training`.
 
 ### Improve the performances
 
-Most likely, this initial experiment did not yield optimal results. However, you can make multiple changes to the config file to improve this model. One obvious change consists in improving the data augmentation strategy. The [`preprocessor.proto`](https://github.com/tensorflow/models/blob/master/research/object_detection/protos/preprocessor.proto) file contains the different data augmentation method available in the Tf Object Detection API. To help you visualize these augmentations, we are providing a notebook: `Explore augmentations.ipynb`. Using this notebook, try different data augmentation combinations and select the one you think is optimal for our dataset. Justify your choices in the writeup. 
-
-Keep in mind that the following are also available:
-* experiment with the optimizer: type of optimizer, learning rate, scheduler etc
-* experiment with the architecture. The Tf Object Detection API [model zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md) offers many architectures. Keep in mind that the `pipeline.config` file is unique for each architecture and you will have to edit it. 
-
+The initial experiment did not yield optimal results. To fix this, we can make multiple changes to the config file to improve this model. One obvious change consists in improving the data augmentation strategy. The [`preprocessor.proto`](https://github.com/tensorflow/models/blob/master/research/object_detection/protos/preprocessor.proto) file contains the different data augmentation method available in the Tf Object Detection API. To help us visualize these augmentations, we are providing a notebook: `Explore augmentations.ipynb`. Using this notebook, we try different data augmentation combinations and select the one we think is optimal for our dataset.
+* The config for our explorations can be found in the `exploration_configs` directory.
+* Flipping the images horizontally can be very useful because it can help us learn car features and also very helpful in pedastrians and cyclists augmentation.
+* Then, we used random_pixel_value_scale to scale the pixel value by some extent to introduce some variability in the color data.
+* random_image_scale is used to randomly scale the image. This can make the image bigger or smaller. Hence, it will allow the model to learn objects of different sizes and scales. A nearby object is going to appear bigger and far away object will appear smaller.
+* random_rgb_to_gray is used to make the image grayscale randomly. This can be useful to learn features irrespective of the color and focus on the shape and other color independent features.
+* Then, we randomly adjust the brightness, contrast, hue and saturation to bring more variability in the image to make the model learn features irrespective of the time of day and quality of the images.
+* We also try to randomly distort the images, change the image quality and add noise to the image. Finally, we crop the image randomly.
 
 ### Creating an animation
 #### Export the trained model
-Modify the arguments of the following function to adjust it to your models:
+To export the model, we can run-
 ```
 python .\exporter_main_v2.py --input_type image_tensor --pipeline_config_path training/experiment0/pipeline.config --trained_checkpoint_dir training/experiment0/ckpt-50 --output_directory training/experiment0/exported_model/
 ```
 
-Finally, you can create a video of your model's inferences for any tf record file. To do so, run the following command (modify it to your files):
+Finally, we can create a video of our model's inferences for any tf record file. To do so, run the following command (modify it to your files):
 ```
 python inference_video.py -labelmap_path label_map.pbtxt --model_path training/experiment0/exported_model/saved_model --tf_record_path /home/workspace/data/test/tf.record --config_path training/experiment0/pipeline_new.config --output_path animation.mp4
 ```
 
-## Submission Template
 
-### Project overview
-This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
 
-### Set up
-This section should contain a brief description of the steps to follow to run the code for this repository.
+### Training Result
+#### Baseline
+We start with the initial config file provided that uses SSD resnet-50 v1 model.
+* Only the model horizontal flip and random crop augmentations are applied.
+* the precision mAP was less than 10 percent.
+* The model performs poorly and in evaluation images, it was unable to recognize many big objects like car that were not even a corner case.
 
-### Dataset
-#### Dataset analysis
-This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
-#### Cross validation
-This section should detail the cross validation strategy and justify your approach.
+#### Experiment 1
+* The batch size was 4 in the baseline model.
+* So, the first ideas was to try to use TPU for training the model.
+* TPUs are very good in performing training with very large batch sizes.
+* Example- I was able to push the batch size to 64 which is 16 times more than what I used on a T4 GPU.
+* Also, the dataset had to be moved to the Google cloud storage. Here, I used the resized images datset which was round 2 GB in size.
+* Also, I tried using the adam optimizer as the optimizer.
+* The bottleneck for TPU is the CPU where a lot of computations have to happen to prepare the batches on CPU.
+* This made evaluation slow because the Object detection API does not support evaluation on TPU.
+* Hence, evaluation had to be don on TPU.
+* Some augmentations were also applied here which can be found in the config file.
+* The TPU training was very fast but results were extremely poor- the precision mAP was 1.34e-3.
 
-### Training 
-#### Reference experiment
-This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
 
-#### Improve on the reference
-This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
+#### Experiment 2
+* Now, we used the unresized images for training which was round 7GB.
+* This did take a hit on the training time. But, gave very good results.
+* The precision mAP is around 17%.
+* The model is performing poorly on medium size images and very poorly on the small objects.
+* The model is still unable to recognized very obvious classes in an image.
+* The learning rate and augmentations were updated for this experiment.
+
+#### Experiment 3
+* Now, CenterNet HourGlass104 512x512 model was used for training.
+* It did take further hit on the training time.
+* Here, the augmentations were updated and the adam optimizer was used.
+* At various steps, the learning rate was updated.
+* The model performed significantly better on large and medium objects.
+* The performance on small objects was also improved but still on the low end.
+* The precision mAP is around 20%.
+* Now, the model is able to recognize obvious objects in an image and various corner cases.
+* The precision and recall remained mostly flat after 6000 steps.
+
+#### Experiment 4
+* The previous experiment made it clear that CenterNet HourGlass104 512x512 is a better model to use.
+* Now, the augmentations were updated.
+* The cosine decay was used for learning rate and the learning rate was also updated.
+* Also, we increased the number of bounding boxes to 150.
+* The improvements were mostly minimal and precision mAP is still around 20%.
+
+#### Conclusion
  
+I tried even more experiments that were not documented here.
+* It was hard to push the results of CenterNet HourGlass104 512x512 model.
+* I tried various augmentations, learning rate and other hyperparameters.
+* To give a rough idea, my google cloud console shows storage transfer to around 653.85 gibibyte (or around 702GB).
+* TPU is very good for training. I later switched to GPU for evaluation and TPU for training.
+* I tried to use EfficientDet D7 1536x1536 model but it consumes resources so fast even for a batch size of 4 that I was getting OOM errors.
+* With better resources, more experiments can be conducted trying out various models and hyperparameters and configs.
+* Using a cloud platform is very fast and convenient. GPU buckets are supported by the tensorflow object detection API. It even pushes the results to it and tensorboard also has support for it. So, switching from Udacity workspace to Colab notebook (pro subscription) + GCP storage provided a great experience.
+* The three demo videos do look good but flaws can be seen in them. The precision mAP was around 20%. This can be pushed even further.
