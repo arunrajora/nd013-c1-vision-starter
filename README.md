@@ -195,11 +195,17 @@ We start with the initial config file provided that uses SSD resnet-50 v1 model.
 
 #### Experiment 2
 * Now, we used the unresized images for training which was round 7GB.
+* I expect the performance to go down for this reason. But, the results should be a lot better than before.
+* The learning rate and augmentations were updated for this experiment. Adam optimizer was used and learning rate was reduced significantly.
+* Results-
+ ![Experiment 2.1](experiments/experiment-2/1.jpg)
+ ![Experiment 2.2](experiments/experiment-2/2.jpg)
+ ![Experiment 2.3](experiments/experiment-2/3.jpg)
+
 * This did take a hit on the training time. But, gave very good results.
 * The precision mAP is around 17%.
 * The model is performing poorly on medium size images and very poorly on the small objects.
 * The model is still unable to recognized very obvious classes in an image.
-* The learning rate and augmentations were updated for this experiment.
 
 #### Experiment 3
 * Now, CenterNet HourGlass104 512x512 model was used for training.
