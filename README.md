@@ -190,7 +190,7 @@ We start with the initial config file provided that uses SSD resnet-50 v1 model.
 * The TPU training was very fast but results were extremely poor- the precision mAP was 1.34e-3.
 * I expected this because the learning rate was on the higher side. From my past projects, Adam optimizer works well with low learning rates like 1e-3. But, I used 3e-2.
 * The objective here was to get TPU working and see the performance benefits.
-
+* The training and validation losses moved up and down around the same value because of the high learning rate.
 
 
 #### Experiment 2
@@ -206,6 +206,7 @@ We start with the initial config file provided that uses SSD resnet-50 v1 model.
 * The precision mAP is around 17%.
 * The model is performing poorly on medium size images and very poorly on the small objects.
 * The model is still unable to recognized very obvious classes in an image.
+* Both the training and validation losses did decrease providing improvements.
 
 #### Experiment 3
 * Now, CenterNet HourGlass104 512x512 model was used for training. It has a better mAP but is slow in computation time.
@@ -224,6 +225,7 @@ We start with the initial config file provided that uses SSD resnet-50 v1 model.
 * The precision mAP is around 20%.
 * Now, the model is able to recognize obvious objects in an image and various corner cases.
 * The precision and recall remained mostly flat after 6000 steps.
+* While the training losses did decrease, the validation losses remained flat after some time.
 
 #### Experiment 4
 * The previous experiment made it clear that CenterNet HourGlass104 512x512 is a better model to use.
@@ -238,5 +240,6 @@ We start with the initial config file provided that uses SSD resnet-50 v1 model.
  ![Experiment 4.4](experiments/experiment-4/3.jpg)
 
 * The improvements were mostly minimal and precision mAP is still around 20%.
+* While the training losses did decrease, the validation losses remained flat after some time.
 * This is probably because the batch size is high and the model starts to over-fit very early on.
 * In future, the learning rate can be reduced significantly to prevent this over-fitting.
