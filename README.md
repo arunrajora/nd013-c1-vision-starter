@@ -51,9 +51,10 @@ There are 100 files to be downloaded so be patient! Once the script is done, loo
 
 Open the `Exploratory Data Analysis` notebook to see the exploratory data analysis. Here are the results-
 * There are 19803 total entries in our dataset. 
+* There are a total of 352694 vehicles, 103664 pedestrians and 2639 cyclists in our dataset.
+ ![Vehicle count](./images/EDA_images/29_0.png)
 * Two box plots are present that show the distribution of how much percentage of an image does a single object occupy. The first plot does not ignore the outliers while the second plot does ignore the outliers.
 * Then, a strip plot is presented for the same.
-* There are a total of 352694 vehicles, 103664 pedestrians and 2639 cyclists in our dataset.
 * Then, a box plot and a strip plot show the distribution of the number of classes in an image.
 * Finally, we found that each image in a dataset file is of a consecutive scene from the recording.
 
@@ -65,9 +66,9 @@ python create_splits.py --data_dir /home/workspace/data/
 ```
 #### Cross validation
 We are going to train the model on 60% of the datset and use 20% for validation. The last 20% is for the test datset. We have used it to generate the three demo videos to see how the model performs.
-* The 100 datset files were shuffled randomly.
+* The 100 dataset files were shuffled randomly.
 * When training the model, we set shuffle to true.
-* This way, the script will create a buffer and from each random file, fetch images randomly to get the batch sizes.
+* This way, the script will create a buffer and from each random file, fetch instances randomly to create a batch.
 
 ### Edit the config file
 
