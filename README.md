@@ -53,10 +53,37 @@ Open the `Exploratory Data Analysis` notebook to see the exploratory data analys
 * There are 19803 total entries in our dataset. 
 * There are a total of 352694 vehicles, 103664 pedestrians and 2639 cyclists in our dataset.
  ![Vehicle count](./images/EDA_images/29_0.png)
-* Two box plots are present that show the distribution of how much percentage of an image does a single object occupy. The first plot does not ignore the outliers while the second plot does ignore the outliers.
-* Then, a strip plot is presented for the same.
-* Then, a box plot and a strip plot show the distribution of the number of classes in an image.
-* Finally, we found that each image in a dataset file is of a consecutive scene from the recording.
+* This shows a huge imbalance for the cyclists class.
+* Here are some different kind of images-
+ * Highway-
+  ![Highway](./images/EDA_images/10_0.png)
+ * Night with artifacts in camera-
+  ![Night](./images/EDA_images/10_4.png)
+ * Street-
+  ![Street](./images/EDA_images/10_5.png)
+ * Evening-
+  ![Evening](./images/EDA_images/10_6.png)
+ * Night with no artifacts-
+  ![Night](./images/EDA_images/10_9.png)
+ * Foggy-
+  ![Foggy](./images/EDA_images/12_0.png)
+
+* Here is the relative area of classes in an image (in percentage)-
+ ![Relative area box plot](./images/EDA_images/20_0.png)
+ * Pedestrians can take upto 100% of the image while vehicles can take upto 40% of the images and cyclist can take less than 10% of an image.
+* In reality, any vehicle, pedastrian or cyclist can get close to an image and occupy upto a 100% of the image. Hence, random scaling and cropping augmentation can be very useful to remove this bias.
+* Here is the same plot above with outliers removed-
+ ![Relative area box plot without outliers](./images/EDA_images/22_0.png)
+* Here, we can see that mostly, classes take less than 30% of the image.
+* Here is a strip plot of the same-
+ ![Strip plot relative size of classes](./images/EDA_images/25_0.png)
+* Here is the frequency distribution of classes in an image-
+ ![Frequency distribution](./images/EDA_images/32_0.png)
+* We can see that mostly, there are cars in the images. But, there are outliers when there are a lot of pedestrians (probably in scenarios like pedestrians crossing a redlight or walking on side of roads).
+* Here is a strip plot for the same-
+ ![Strip plot frequency distribution](./images/EDA_images/33_0.png)
+* Here are examples of images containing minimum and maximum number of classes in an image-
+ ![instances](./images/EDA_images/36_1.png) 
 
 ### Create the splits
 
