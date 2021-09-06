@@ -157,11 +157,18 @@ python inference_video.py -labelmap_path label_map.pbtxt --model_path training/e
 
 
 ### Training Result
+* You can find the results here-[Tensorboard dev experiment results](https://tensorboard.dev/experiment/gdCqYz4tRbqIE0D3YI57zQ/).
+* For screenshots, you can visit- `experiments/{experiment}/` directory.
+
 #### Baseline
 We start with the initial config file provided that uses SSD resnet-50 v1 model.
 * Only the model horizontal flip and random crop augmentations are applied.
-* the precision mAP was less than 10 percent.
 * The model performs poorly and in evaluation images, it was unable to recognize many big objects like car that were not even a corner case.
+* Results-
+ ![baseline 1](experiments/experiment/1.jpg)
+ ![baseline 2](experiments/experiment/2.jpg)
+ ![baseline 3](experiments/experiment/3.jpg)
+* the precision mAP is less than 10 percent.
 
 #### Experiment 1
 * The batch size was 4 in the baseline model.
