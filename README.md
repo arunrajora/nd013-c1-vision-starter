@@ -165,9 +165,9 @@ We start with the initial config file provided that uses SSD resnet-50 v1 model.
 * Only the model horizontal flip and random crop augmentations are applied.
 * The model performs poorly and in evaluation images, it was unable to recognize many big objects like car that were not even a corner case.
 * Results-
- ![baseline 1](experiments/experiment/1.jpg)
- ![baseline 2](experiments/experiment/2.jpg)
- ![baseline 3](experiments/experiment/3.jpg)
+ ![baseline 1](experiments/baseline/1.jpg)
+ ![baseline 2](experiments/baseline/2.jpg)
+ ![baseline 3](experiments/baseline/3.jpg)
 * the precision mAP is less than 10 percent.
 
 #### Experiment 1
