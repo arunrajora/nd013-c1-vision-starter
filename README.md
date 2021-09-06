@@ -136,7 +136,12 @@ The initial experiment did not yield optimal results. To fix this, we can make m
 * random_rgb_to_gray is used to make the image grayscale randomly. This can be useful to learn features irrespective of the color and focus on the shape and other color independent features.
 * Then, we randomly adjust the brightness, contrast, hue and saturation to bring more variability in the image to make the model learn features irrespective of the time of day and quality of the images.
 * We also try to randomly distort the images, change the image quality and add noise to the image. Finally, we crop the image randomly.
-
+* Here are some sample augmentations (more can be found in the images/augmentation_images directory)-
+ ![augmentation 1](images/augmentation_images/7_0.png)
+ ![augmentation 2](images/augmentation_images/7_1.png)
+ ![augmentation 3](images/augmentation_images/7_2.png)
+ ![augmentation 4](images/augmentation_images/7_11.png)
+ ![augmentation 5](images/augmentation_images/7_18.png)
 ### Creating an animation
 #### Export the trained model
 To export the model, we can run-
