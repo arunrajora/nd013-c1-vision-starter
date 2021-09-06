@@ -208,10 +208,17 @@ We start with the initial config file provided that uses SSD resnet-50 v1 model.
 * The model is still unable to recognized very obvious classes in an image.
 
 #### Experiment 3
-* Now, CenterNet HourGlass104 512x512 model was used for training.
-* It did take further hit on the training time.
+* Now, CenterNet HourGlass104 512x512 model was used for training. It has a better mAP but is slow in computation time.
 * Here, the augmentations were updated and the adam optimizer was used.
 * At various steps, the learning rate was updated.
+* I expect the performance to go down. But, the results should be better than before.
+* Results-
+ ![Experiment 3.1](experiments/experiment-3/1.jpg)
+ ![Experiment 3.2](experiments/experiment-3/2.jpg)
+ ![Experiment 3.3](experiments/experiment-3/3.jpg)
+ ![Experiment 3.4](experiments/experiment-3/3.jpg)
+
+* It did take further hit on the training time.
 * The model performed significantly better on large and medium objects.
 * The performance on small objects was also improved but still on the low end.
 * The precision mAP is around 20%.
