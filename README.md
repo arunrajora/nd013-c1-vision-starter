@@ -96,6 +96,8 @@ We are going to train the model on 60% of the datset and use 20% for validation.
 * The 100 dataset files were shuffled randomly.
 * When training the model, we set shuffle to true.
 * This way, the script will create a buffer and from each random file, fetch instances randomly to create a batch.
+* When the model trains, the checkpoint will be generated after every 1000 steps.
+* Then, the validation will happen once a checkpoint is found.
 
 ### Edit the config file
 
