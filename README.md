@@ -230,4 +230,13 @@ We start with the initial config file provided that uses SSD resnet-50 v1 model.
 * Now, the augmentations were updated.
 * The cosine decay was used for learning rate and the learning rate was also updated.
 * Also, we increased the number of bounding boxes to 150.
+* I expect some improvements for these reasons.
+* Results-
+ ![Experiment 4.1](experiments/experiment-4/1.jpg)
+ ![Experiment 4.2](experiments/experiment-4/2.jpg)
+ ![Experiment 4.3](experiments/experiment-4/3.jpg)
+ ![Experiment 4.4](experiments/experiment-4/3.jpg)
+
 * The improvements were mostly minimal and precision mAP is still around 20%.
+* This is probably because the batch size is high and the model starts to over-fit very early on.
+* In future, the learning rate can be reduced significantly to prevent this over-fitting.
