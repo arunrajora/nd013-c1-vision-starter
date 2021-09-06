@@ -179,9 +179,18 @@ We start with the initial config file provided that uses SSD resnet-50 v1 model.
 * Also, I tried using the adam optimizer as the optimizer.
 * The bottleneck for TPU is the CPU where a lot of computations have to happen to prepare the batches on CPU.
 * This made evaluation slow because the Object detection API does not support evaluation on TPU.
-* Hence, evaluation had to be don on TPU.
+* Hence, evaluation had to be donw on TPU.
 * Some augmentations were also applied here which can be found in the config file.
+* Results-
+ ![Experiment 1.1](experiments/baseline/1.jpg)
+ ![Experiment 1.2](experiments/baseline/2.jpg)
+ ![Experiment 1.3](experiments/baseline/3.jpg)
+ ![Experiment 1.4](experiments/baseline/4.jpg)
+
 * The TPU training was very fast but results were extremely poor- the precision mAP was 1.34e-3.
+* I expected this because the learning rate was on the higher side. From my past projects, Adam optimizer works well with low learning rates like 1e-3. But, I used 3e-2.
+* The objective here was to get TPU working and see the performance benefits.
+
 
 
 #### Experiment 2
